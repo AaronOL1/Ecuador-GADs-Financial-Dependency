@@ -1,0 +1,13 @@
+# Archivos de datos de Kaggle (No subir por peso)
+*.csv
+*.xlsx
+*.zip
+*.json
+
+# Carpetas de datos crudos
+data/raw/
+data/processed/
+
+# Archivos temporales del sistema
+.DS_Store
+Thumbs.db
