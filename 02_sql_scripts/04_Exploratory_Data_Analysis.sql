@@ -102,8 +102,3 @@ GROUP BY
 
  -- INSIGHT: Logistics directly impact brand reputation. On-time deliveries average an excellent 4.29 stars, 
  -- while late deliveries plummet to a poor 2.57 stars.
-
-	select * from olist_orders_dataset
-	select * from olist_customers_dataset
-    select * from olist_order_items_dataset
-    select * from olist_order_reviews_dataset
