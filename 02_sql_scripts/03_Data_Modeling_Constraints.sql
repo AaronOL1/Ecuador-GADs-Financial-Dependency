@@ -47,3 +47,24 @@ ALTER TABLE olist_order_payments_dataset
 ADD CONSTRAINT FK_Payments_Orders
 FOREIGN KEY (order_id) REFERENCES olist_orders_dataset(order_id);
 GO
+
+
+/* ============================================================================
+   SCRIPT: Fix and Link Category Translation to Products
+============================================================================ */
+
+-- Step 1: Make the column NOT NULL (A requirement for Primary Keys)
+ALTER TABLE product_category_name_translation
+ALTER COLUMN product_category_name NVARCHAR(100) NOT NULL;
+GO
+
+-- Step 2: Now we can safely make it the Primary Key
+ALTER TABLE product_category_name_translation
+ADD CONSTRAINT PK_Category_Translation PRIMARY KEY (product_category_name);
+GO
+
+-- Step 3: Link the Products table to the Translation table
+ALTER TABLE olist_products_dataset
+ADD CONSTRAINT FK_Products_Translation
+FOREIGN KEY (product_category_name) REFERENCES product_category_name_translation(product_category_name);
+GO
