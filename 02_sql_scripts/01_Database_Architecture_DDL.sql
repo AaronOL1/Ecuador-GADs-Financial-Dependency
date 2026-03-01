@@ -72,12 +72,34 @@ CREATE TABLE olist_products_dataset (
 
     --CATEGORY TRANSLATION: Helper table to translate Portuguese categories to English
 CREATE TABLE product_category_name_translation (
-    product_category_name NVARCHAR(100),
+    product_category_name NVARCHAR(100) NOT NULL PRIMARY KEY,
     product_category_name_english NVARCHAR(100)
-);
 
+        -- 1. Safely insert 'pc_gamer' only if it's missing
+IF NOT EXISTS (SELECT * FROM product_category_name_translation WHERE product_category_name = 'pc_gamer')
+BEGIN
+    INSERT INTO product_category_name_translation (product_category_name, product_category_name_english)
+    VALUES ('pc_gamer', 'pc_gamer');
+END
+GO
 
--- ORDERSFACT TABLE: Stores all core order timestamps for logistical analysis
+        -- 2. Safely insert the portable kitchen category only if it's missing
+IF NOT EXISTS (SELECT * FROM product_category_name_translation WHERE product_category_name = 'portateis_cozinha_e_preparadores_de_alimentos')
+BEGIN
+    INSERT INTO product_category_name_translation (product_category_name, product_category_name_english)
+    VALUES ('portateis_cozinha_e_preparadores_de_alimentos', 'portable_kitchen_food_preparers');
+END
+GO
+
+        -- 3. Safely create the visual link (Foreign Key) only if it doesn't exist yet
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE name = 'FK_Products_Translation')
+BEGIN
+    ALTER TABLE olist_products_dataset
+    ADD CONSTRAINT FK_Products_Translation
+    FOREIGN KEY (product_category_name) REFERENCES product_category_name_translation(product_category_name);
+END
+GO
+
 
 CREATE TABLE olist_orders_dataset (
 	order_id NVARCHAR(50) NOT NULL PRIMARY KEY,
